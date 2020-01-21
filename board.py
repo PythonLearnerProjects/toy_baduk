@@ -23,11 +23,12 @@ class Board:
         board is created with board = Board(), do it here.
         perhaps making something to store the stones in might be worthwhile?
         """
+        self._board = [[Stone.EMPTY]*width for x in range(height)]
         pass
     def get_stone_at(self, x, y):
-        return Stone.EMPTY
+        return self._board[y-1][x-1]
     def set_stone_at(self, x, y, stone):
-        pass
+        self._board[y-1][x-1] = stone
     def _neighbors(self, x, y):
         """
         By convention, fields starting with _ are meant to be accessed only from inside the class.

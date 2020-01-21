@@ -15,6 +15,7 @@ WIN_H = 16
 WIN_MARGIN = 5
 BOARD_SPACING = 2
 
+
 class Display:
     """
     Class to display the game board on the screen.
