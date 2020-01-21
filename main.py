@@ -7,7 +7,6 @@ from board import Board, Stone
 
 def main(screen):
     # Create the display object. This is found in util.py
-    player=0
     x=3
     y=3
     display = Display(screen)
@@ -34,7 +33,7 @@ def main(screen):
         elif input_char == curses.KEY_LEFT and x > 1:
             x=x-1
         elif input_char == 32:
-            player = board.set_stone_at(x, y, turn, player)
+            turn = board.set_stone_at(x, y, turn)
 
         display.set_cursor((x,y))
         # These may help you figure out what is going on

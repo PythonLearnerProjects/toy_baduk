@@ -29,16 +29,17 @@ class Board:
         x=x-1
         y=y-1
         return self.boardStone[x][y]
-    def set_stone_at(self, x, y, stone, player):
+    def set_stone_at(self, x, y, stone):
         x=x-1
         y=y-1
-        if self.boardStone[x][y] == Stone.EMPTY and player==0:
+        if stone == Stone.BLACK and self.boardStone[x][y]==stone.EMPTY:
             self.boardStone[x][y]= Stone.BLACK
-            player=1
-        elif self.boardStone[x][y] == Stone.EMPTY and player==1:
+            stone = stone.WHITE
+        elif stone == Stone.WHITE and self.boardStone[x][y]==stone.EMPTY:
             self.boardStone[x][y]= Stone.WHITE
-            player=0
-        return player
+            stone = stone.BLACK
+        return stone
+
     def _neighbors(self, x, y):
         """
         By convention, fields starting with _ are meant to be accessed only from inside the class.
