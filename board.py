@@ -1,8 +1,3 @@
-#######################################
-# Exercise 2: Implement enough of     #
-# this class that the stones appear on#
-# the board when space is pressed     #
-#######################################
 from enum import Enum
 
 class Stone(Enum):
