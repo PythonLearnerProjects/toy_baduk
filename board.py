@@ -23,23 +23,11 @@ class Board:
         board is created with board = Board(), do it here.
         perhaps making something to store the stones in might be worthwhile?
         """
-        self.boardStone = [[Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY],[Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY],[Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY],[Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY],[Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY,Stone.EMPTY]]
         pass
     def get_stone_at(self, x, y):
-        x=x-1
-        y=y-1
-        return self.boardStone[x][y]
+        return Stone.EMPTY
     def set_stone_at(self, x, y, stone):
-        x=x-1
-        y=y-1
-        if stone == Stone.BLACK and self.boardStone[x][y]==stone.EMPTY:
-            self.boardStone[x][y]= Stone.BLACK
-            stone = stone.WHITE
-        elif stone == Stone.WHITE and self.boardStone[x][y]==stone.EMPTY:
-            self.boardStone[x][y]= Stone.WHITE
-            stone = stone.BLACK
-        return stone
-
+        pass
     def _neighbors(self, x, y):
         """
         By convention, fields starting with _ are meant to be accessed only from inside the class.
