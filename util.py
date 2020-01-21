@@ -26,7 +26,6 @@ class Display:
     """
     def __init__(self, screen):
         self.screen = screen
-        screen.clear()
         curses.curs_set(0)
         curses.noecho()
         self.window = curses.newwin(WIN_H,
@@ -39,14 +38,13 @@ class Display:
         self._cursor_location = None
 
     def print_board(self, piece_at):
-        self.window.clear()
         if piece_at == None:
             piece_at = lambda x, y: None
         for x in range(1, 6):
-            board_num = str(x + 1)
+            board_num = str(x)
             self.window.addstr(0, x * BOARD_SPACING, board_num)
         for y in range(1, 6):
-            self.window.addch(y, 0, str(y - 1))
+            self.window.addch(y, 0, str(y))
             for x in range(1, 6):
                 if (x, y) == self._cursor_location:
                     attribute = curses.A_REVERSE
