@@ -1,3 +1,4 @@
+
 from curses import wrapper
 import curses
 from util import Display, eprint
@@ -43,4 +44,3 @@ def main(screen):
     
 if __name__ == "__main__":
     wrapper(main)
-    
