@@ -1,13 +1,13 @@
+from curses import wrapper
 from util import Display, eprint
 from time import sleep
 from board import Board
+import sys
 
 
-def main():
+def main(screen):
     # Create the display object. This is found in util.py
-    x=3
-    y=3
-    display = Display()
+    display = Display(screen)
     board = Board()
     message = 'Hello'
     key_template = "The last key pressed was: \n {} {}"
@@ -27,18 +27,7 @@ def main():
         # https://docs.python.org/3/library/curses.html#constants
 
         input_char = display.get_input()
-        display.set_cursor((x,y))
-
-        if input_char == 67:
-            x=x+1
-        elif input_char == 66:
-            y=y+1
-        elif input_char == 65:
-            y=y-1
-        elif input_char == 68:
-            x=x-1
-
-        display.set_cursor((x,y))
+        display.set_cursor((3,3))
 
         # These may help you figure out what is going on
         eprint("This appears in the error log.", input_char)
@@ -48,5 +37,5 @@ def main():
         ######################################################
     
 if __name__ == "__main__":
-    main()
+    wrapper(main)
     
