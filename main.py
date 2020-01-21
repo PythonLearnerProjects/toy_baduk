@@ -25,17 +25,16 @@ def main(screen):
 
         input_char = display.get_input()
 
-        if input_char == curses.KEY_RIGHT:
+        if input_char == curses.KEY_RIGHT and x<5:
             x=x+1
-        elif input_char == curses.KEY_DOWN:
+        elif input_char == curses.KEY_DOWN and y<5:
             y=y+1
-        elif input_char == curses.KEY_UP:
+        elif input_char == curses.KEY_UP and y>1:
             y=y-1
-        elif input_char == curses.KEY_LEFT:
+        elif input_char == curses.KEY_LEFT and x > 1:
             x=x-1
         elif input_char == 32:
             player = board.set_stone_at(x, y, turn, player)
-
 
         display.set_cursor((x,y))
         # These may help you figure out what is going on
