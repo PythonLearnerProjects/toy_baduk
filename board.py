@@ -37,12 +37,14 @@ class Board:
     def set_stone_at(self, x, y, stone):
         x=x-1
         y=y-1
-        if stone == Stone.BLACK and self.board_stone[x][y]==stone.EMPTY:
-            self.board_stone[x][y]= Stone.BLACK
-            stone = stone.WHITE
-        elif stone == Stone.WHITE and self.board_stone[x][y]==stone.EMPTY:
-            self.board_stone[x][y]= Stone.WHITE
-            stone = stone.BLACK
+        if self.board_stone[x][y] == Stone.EMPTY:
+            if stone == Stone.BLACK :
+                self.board_stone[x][y]= Stone.BLACK
+                stone = Stone.WHITE
+            elif stone == Stone.WHITE:
+                self.board_stone[x][y]= Stone.WHITE
+                stone = Stone.BLACK
+        
         return stone
 
     def _neighbors(self, x, y):
