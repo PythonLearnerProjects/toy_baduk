@@ -28,11 +28,20 @@ class Board:
         board is created with board = Board(), do it here.
         perhaps making something to store the stones in might be worthwhile?
         """
+        self._board = [[Stone.EMPTY]*width for x in range(height)]
         pass
     def get_stone_at(self, x, y):
-        return Stone.EMPTY
+        if x < 1 or y < 1 or y > 5 or y > 5:
+            raise InvalidCoordException
+        return self._board[y-1][x-1]
     def set_stone_at(self, x, y, stone):
-        pass
+        if stone not in (Stone.BLACK, Stone.WHITE):
+            raise InvalidStoneException
+        if x < 1 or y < 1 or y > 5 or y > 5:
+            raise InvalidCoordException
+        if self._board[y-1][x-1] != Stone.EMPTY:
+            raise InvalidCoordException
+        self._board[y-1][x-1] = stone
 
     def _neighbors(self, x, y):
         """
