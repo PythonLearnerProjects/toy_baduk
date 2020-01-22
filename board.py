@@ -18,16 +18,30 @@ class Board:
     board.get_stone_at(1,1) == Stone.BLACK
     """
     def __init__(self, width, height):
-        """
-        This is called an initialiser. If you need to do some setup when the 
-        board is created with board = Board(), do it here.
-        perhaps making something to store the stones in might be worthwhile?
-        """
+        self.board_stone = list()
+        for x in range(width):
+            self.board_stone.append([])
+            for y in range(height):
+                self.board_stone[x].append(Stone.EMPTY)
         pass
+
     def get_stone_at(self, x, y):
-        return Stone.EMPTY
+        x=x-1
+        y=y-1
+        return self.board_stone[x][y]
     def set_stone_at(self, x, y, stone):
-        pass
+        x=x-1
+        y=y-1
+        if self.board_stone[x][y] == Stone.EMPTY:
+            if stone == Stone.BLACK :
+                self.board_stone[x][y]= Stone.BLACK
+                stone = Stone.WHITE
+            elif stone == Stone.WHITE:
+                self.board_stone[x][y]= Stone.WHITE
+                stone = Stone.BLACK
+        
+        return stone
+
     def _neighbors(self, x, y):
         """
         By convention, fields starting with _ are meant to be accessed only from inside the class.
