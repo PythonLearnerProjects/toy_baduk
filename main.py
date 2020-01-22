@@ -5,7 +5,7 @@ import json
 from util import Display, eprint
 from time import sleep
 from board import Board, Stone
-import websocket
+import websocket, ssl
 
 
 def main(screen):
@@ -23,7 +23,8 @@ def main(screen):
     key_template = "The last key pressed was: \n {} {}"
     board = Board(5, 5)
     turn = Stone.BLACK
-    ws = websocket.create_connection("wss://ma4192ic8e.execute-api.us-west-2.amazonaws.com/Prod/")
+    ws = websocket.create_connection("wss://ma4192ic8e.execute-api.us-west-2.amazonaws.com/Prod/",
+      sslopt={"cert_reqs": ssl.CERT_NONE})
 
     while True:
         # See util.py for where these methods are defined
