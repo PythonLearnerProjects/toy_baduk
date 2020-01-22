@@ -30,13 +30,12 @@ class TestBoard(unittest.TestCase):
         board = Board(5,5)
         failure_msg = ("The board should raise InvalidCoordException"
                           " unless the position on the board is empty.")
-        with self.assertRaises(InvalidCoordException) as cm:
-            with self.assertRaises(InvalidCoordException, msg=failure_msg) as cm:
-                try:
-                    board.set_stone_at(1,1, Stone.BLACK)
-                    board.set_stone_at(1,1, Stone.BLACK)
-                except InvalidStoneException as e:
-                    pass
+        with self.assertRaises(InvalidCoordException, msg=failure_msg) as cm:
+            try:
+                board.set_stone_at(1,1, Stone.BLACK)
+                board.set_stone_at(1,1, Stone.BLACK)
+            except InvalidStoneException as e:
+                pass
             
     def test_04_place_valid(self):
         failure_msg = ("Placing at a valid location should"
@@ -70,16 +69,16 @@ class TestBoard(unittest.TestCase):
         board = Board(5,5)
         for x in range(1,6):
             for y in range(1,6):
-                self.assertEquals(board.get_stone_at(x,y), Stone.EMPTY, msg=failure_msg)
+                self.assertEqual(board.get_stone_at(x,y), Stone.EMPTY, msg=failure_msg)
         
     def test_07_place_get(self):
         board = Board(5,5)
         failure_msg = ("get_stone_at on an occupied place should return the stone")
         board.set_stone_at(1,1, Stone.BLACK)
-        self.assertEquals(board.get_stone_at(1,1), Stone.BLACK, msg=failure_msg)
+        self.assertEqual(board.get_stone_at(1,1), Stone.BLACK, msg=failure_msg)
         board.set_stone_at(1,3, Stone.WHITE)
-        self.assertEquals(board.get_stone_at(1,3), Stone.WHITE, msg=failure_msg)
-        self.assertEquals(board.get_stone_at(1,1), Stone.BLACK, msg=failure_msg)
+        self.assertEqual(board.get_stone_at(1,3), Stone.WHITE, msg=failure_msg)
+        self.assertEqual(board.get_stone_at(1,1), Stone.BLACK, msg=failure_msg)
 
 if __name__ == '__main__':
     unnittest.main()
