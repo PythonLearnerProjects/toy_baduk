@@ -5,6 +5,11 @@
 #######################################
 from enum import Enum
 
+class InvalidStoneException(Exception):
+    pass
+class InvalidCoordException(Exception):
+    pass
+
 class Stone(Enum):
     BLACK = 1
     WHITE = 2
@@ -28,6 +33,7 @@ class Board:
         return Stone.EMPTY
     def set_stone_at(self, x, y, stone):
         pass
+
     def _neighbors(self, x, y):
         """
         By convention, fields starting with _ are meant to be accessed only from inside the class.
