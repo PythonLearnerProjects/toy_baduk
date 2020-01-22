@@ -1,6 +1,9 @@
 from enum import Enum
 
 class Stone(Enum):
+    """
+    Different options for things that can be on our board.
+    """
     BLACK = 'X'
     WHITE = 'O'
     EMPTY = '.'
@@ -8,6 +11,10 @@ class Stone(Enum):
         return self.value
 
 class Board:
+    """
+    Stub of class to represent the game board.
+    This will be fleshed out in exercise 2.
+    """
     def get_stone_at(self, x, y):
         return Stone.EMPTY
     def put_stone_at(x, y, stone):

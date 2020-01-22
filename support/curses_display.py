@@ -34,7 +34,7 @@ class CursesDisplay:
                                     width * 2,
                                     WIN_MARGIN + 1,
                                     WIN_MARGIN + 2)
-        self._textpad = curses.newpad(10, width * 2)
+        self._textpad = curses.newpad(10, width * 4)
         self._x_labels = string.ascii_uppercase
         self._y_labels = [str(x) for x in range(1, height + 1)]
         self._cursor_location = (1, 1)
@@ -48,12 +48,12 @@ class CursesDisplay:
         self.print_background()
         self.refresh()
 
-    def print_board(self, piece_at):
+    def print_board(self, stone_provider):
         """ Re-print the game board. 
 
         Arguments
         ---------
-        piece_at: function(x,y) -> str
+        stone_provider: function(x,y) -> str
             Takes an x and y numerical location between
             1 and board.width or board.height and outputs
             a string of length 1 representing the piece at
@@ -63,7 +63,7 @@ class CursesDisplay:
         self._window.chgat(curses.A_NORMAL) 
         for y in range(0, self._height):
             for x in range(0, self._width):
-                stone = piece_at(x + 1, y + 1)
+                stone = stone_provider(x + 1, y + 1)
                 assert(len(str(stone)) == 1)
                 self._window.addch(y, x * BOARD_SPACING, str(stone))
 
