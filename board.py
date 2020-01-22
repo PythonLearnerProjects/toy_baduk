@@ -1,9 +1,11 @@
 from enum import Enum
 
 class Stone(Enum):
-    BLACK = 1
-    WHITE = 2
-    EMPTY = 0
+    BLACK = 'X'
+    WHITE = 'O'
+    EMPTY = '.'
+    def __str__(self):
+        return self.value
 
 class Board:
     def get_stone_at(self, x, y):
