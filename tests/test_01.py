@@ -56,7 +56,7 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(self.interface.get_cursor(), (1, 1))
  
         
-    def test_04_print_board(self):
+    def test_03_print_board(self):
         """
         This tests that the board can be printed correctly.
         """
@@ -74,7 +74,7 @@ class TestBoard(unittest.TestCase):
                                                       "..X..\n"\
                                                       "...X.\n"\
                                                       "....X")
-    def test_04_print_board(self):
+    def test_04_print_margin(self):
         """
         This tests that the margins are printed as expected.
         They should be the letters A B C D ... along the sides,
