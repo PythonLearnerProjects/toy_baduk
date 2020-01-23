@@ -62,7 +62,19 @@ class Interface(CursesDisplay):
             display_msg = "Another non-ascii key"
         self.display_message(key_template.format(keycode, display_msg))
         x_old, y_old = self.get_cursor()
-        x_new, y_new = x_old, y_old
+        direction_lookup = {
+            CursesDisplay.KEY_UP:    ( 0, -1),
+            CursesDisplay.KEY_DOWN:  ( 0,  1),
+            CursesDisplay.KEY_LEFT:  (-1,  0),
+            CursesDisplay.KEY_RIGHT: ( 1,  0),
+        }
+        direction = direction_lookup.get(keycode, None)
+        if direction is not None:
+            dx, dy = direction
+            x_new, y_new = x_old + dx, y_old + dy
+            x_new = max(min(x_new, self._width), 1)
+            y_new = max(min(y_new, self._height), 1)
+
 
 
 
@@ -92,6 +104,13 @@ class Interface(CursesDisplay):
 
         x_labels = string.ascii_uppercase
         y_labels = [str(x).rjust(2, ' ') for x in range(1, self._height + 1)]
+
+        for x in range(1, self._width + 1):
+            self.print_margin(self.MARGIN_TOP, x, x_labels[x-1])
+            self.print_margin(self.MARGIN_BOTTOM, x, x_labels[x-1])
+        for y in range(1, self._width + 1):
+            self.print_margin(self.MARGIN_LEFT, y, y_labels[-y])
+            self.print_margin(self.MARGIN_RIGHT, y, y_labels[-y])
 
 
         #self.print_margin(self.MARGIN_TOP, 1, x_labels[0])
@@ -133,6 +152,13 @@ class Interface(CursesDisplay):
 
         # You do not need to keep the code inside this region. 
         # It's simply to make it easier to figure out what's going on.
+
+        stone = stone_provider(1, 1)
+        self.print_character_at(1, 1, stone)
+        for y in range(1, self._height + 1):
+            for x in range(1, self._width + 1):
+                stone = stone_provider(x + 1, y + 1)
+                self.print_character_at(x, y, stone)
 
 
 
