@@ -17,5 +17,7 @@ class Board:
     """
     def get_stone_at(self, x, y):
         return Stone.EMPTY
+    def get_stone_str_at(self, x, y):
+        return str(self.get_stone_at(x, y))
     def put_stone_at(x, y, stone):
         pass

@@ -1,5 +1,4 @@
 import curses
-import string
 import sys
 
 WIN_W = 32
@@ -8,77 +7,117 @@ WIN_MARGIN = 5
 BOARD_SPACING = 2
 
 def _board_to_screen(x, y):
-    x = (x - 1) * BOARD_SPACING
-    y = y - 1
+    x = (x - 1) * BOARD_SPACING + 1
+    y = y
     return x, y
 
 class CursesDisplay:
     """ Class to display the game board on the screen.
     Also responsible for input in this case.
     """
-    UP = curses.KEY_UP
-    DOWN = curses.KEY_DOWN
-    LEFT = curses.KEY_LEFT
-    RIGHT = curses.KEY_RIGHT
+    KEY_UP = curses.KEY_UP
+    KEY_DOWN = curses.KEY_DOWN
+    KEY_LEFT = curses.KEY_LEFT
+    KEY_RIGHT = curses.KEY_RIGHT
+    MARGIN_LEFT= 0
+    MARGIN_TOP = 1
+    MARGIN_RIGHT = 2
+    MARGIN_BOTTOM = 3
 
     def __init__(self, screen, width, height):
+        """
+        Arguments
+        ---------
+            screen: curses screen object
+                Provided by curses.wrapper via main()
+            width: int
+                width of game board 
+            height: int
+                height of game board 
+        """
+
         self._width = width
         self._height = height
         self._screen = screen
-        self._background = curses.newwin(height + 2,
-                                    width * BOARD_SPACING + 4,
+        # TODO: Get rid of all the magic numbers in this and in print_*
+        self._background = curses.newwin(height + 4,
+                                    width * BOARD_SPACING + 6,
                                     WIN_MARGIN,
                                     WIN_MARGIN)
  
-        self._window = curses.newwin(height,
-                                    width * 2,
+        self._window = curses.newwin(height + 2,
+                                    width * 2 + 2,
                                     WIN_MARGIN + 1,
                                     WIN_MARGIN + 2)
         self._textpad = curses.newpad(10, width * 4)
-        self._x_labels = string.ascii_uppercase
-        self._y_labels = [str(x) for x in range(1, height + 1)]
         self._cursor_location = (1, 1)
 
         screen.clear()
         curses.curs_set(0)
         curses.noecho()
-        self._window.attron(curses.A_NORMAL)
         self._textpad.idlok(True)
         self._textpad.scrollok(True)
-        self.print_background()
         self.refresh()
 
-    def print_board(self, stone_provider):
-        """ Re-print the game board. 
-
-        Arguments
-        ---------
-        stone_provider: function(x,y) -> str
-            Takes an x and y numerical location between
-            1 and board.width or board.height and outputs
-            a string of length 1 representing the piece at
-            that location.
+    def clear_game_subwindow(self):
+        """ Clears the subwindow displaying the game board.
         """
         self._window.clear()
-        self._window.chgat(curses.A_NORMAL) 
-        for y in range(0, self._height):
-            for x in range(0, self._width):
-                stone = stone_provider(x + 1, y + 1)
-                assert(len(str(stone)) == 1)
-                self._window.addch(y, x * BOARD_SPACING, str(stone))
+        self._window.border()
 
-    def print_background(self):
-        """ Re-print the background for the game board.
+    def clear_background(self):
+        """ Clears the subwindow displaying the game board.
         """
         self._background.clear()
-        for x in range(0, self._width):
-            label= self._x_labels[x]
-            self._background.addch(0, (x + 1) * BOARD_SPACING, label)
-            self._background.addch((self._height + 1), (x + 1) * BOARD_SPACING, label)
-        for y in range(0, self._width):
-            label = self._y_labels[y].rjust(2, ' ')
-            self._background.addstr(y + 1, 0, label)
-            self._background.addstr(y + 1, (self._width + 1) * BOARD_SPACING, label)
+
+
+    def print_character_at(self, x, y, character):
+        """ Print a character on the game board
+        Arguments
+        ---------
+            x: int
+                x location of target must be inside game board
+            y: int
+                y location of target must be inside game board
+            character: str of length 1
+                character to print
+        """
+        x_scr, y_scr = _board_to_screen(x, y)
+        self._window.chgat(curses.A_NORMAL, 1) 
+        assert str(character) == character
+        assert len(character) == 1
+        assert x_scr > 0 and x_scr < self._width * BOARD_SPACING + 2, "x out of bounds"
+        assert y_scr > 0 and y_scr < self._height + 2, "y out of bounds"
+        self._window.addch(y_scr, x_scr, character)
+        
+    def print_margin(self, margin, n, character):
+        """ Print a character on the margin around the game board
+        Arguments
+        ---------
+            n: int
+                distance down the margin
+            character: str of length 1
+                character to print
+        """
+        assert str(character) == character
+        n = n + 1
+        assert n > 0
+        if margin == self.MARGIN_LEFT:
+            assert len(character) <= 2
+            assert n < self._height + 3, "n out of bounds"
+            self._background.addstr(n, 0, character)
+        elif margin == self.MARGIN_TOP:
+            assert len(character) == 1
+            assert n < (self._width + 1) * BOARD_SPACING + 2, "n out of bounds"
+            self._background.addch(0, (n) * BOARD_SPACING, character)
+        elif margin == self.MARGIN_RIGHT:
+            assert len(character) <= 2
+            assert n < self._height + 3, "n out of bounds"
+            self._background.addstr(n, (self._width + 1) * BOARD_SPACING + 2, character)
+        elif margin == self.MARGIN_BOTTOM:
+            assert len(character) == 1
+            assert n < (self._width + 1) * BOARD_SPACING + 2, "n out of bounds"
+            self._background.addch((self._height + 3), (n) * BOARD_SPACING, character)
 
     def set_cursor(self, location):
         """ Set the location of the game cursor
@@ -88,15 +127,15 @@ class CursesDisplay:
             $ display = CursesDisplay(screen, 5, 5)
             $ display.set_cursor((1,1))
         """
-
+        return
         old_x, old_y = _board_to_screen(*self._cursor_location)
         self._window.chgat(old_y, old_x, 1, curses.A_NORMAL) 
 
         x, y = location
 
         x_scr, y_scr = _board_to_screen(x, y)
-        assert y_scr >= 0 and y_scr < self._height, "Y out of bounds"
-        assert x_scr >= 0 and x_scr < self._height, "X out of bounds"
+        assert y_scr > 0 and y_scr < self._height + 1, "y_scr out of bounds {}".format(y_scr)
+        assert x_scr > 0 and x_scr < self._width * BOARD_SPACING + 2, "x_scr out of bounds {}".format(x_scr)
         self._cursor_location = x, y 
 
         self._window.chgat(y_scr, x_scr, 1, curses.A_REVERSE) 
@@ -145,4 +184,4 @@ class CursesDisplay:
         self._screen.refresh()
         self._background.refresh()
         self._window.refresh()
-        self._textpad.refresh(0, 0, self._height + 8, 5, 100, 100)
+        self._textpad.refresh(0, 0, self._height + 10, 5, 100, 100)

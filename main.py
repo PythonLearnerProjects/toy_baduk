@@ -7,7 +7,7 @@ import sys
 
 def main(screen):
     board = Board()
-    display = Interface(board.get_stone_at, screen, 19, 19)
+    display = Interface(board.get_stone_str_at, screen, 19, 19)
     message = 'Hello'
     key_template = "The last key pressed was: {} {}"
     input_char = None
